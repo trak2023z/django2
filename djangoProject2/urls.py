@@ -15,7 +15,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib import admin
+from django.urls import path,include
+from rest_framework import routers
+from announcements.views import *
+
+
+router = routers.DefaultRouter()
+router.register(r'users',UserViewSet)
+router.register(r'ann',AnnoucementViewSet)
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('', include('django.contrib.auth.urls')),
+    path('admin/', admin.site.urls),
+    path('api/',include(router.urls)),
+    path('auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('auth/', include('dj_rest_auth.urls')),
+    path('api/anno/',AnnoucementOwnViewSet.as_view()),
+    path('api/anno/<int:pk>/',AnnoucementOwnSetDetail.as_view()),
+
 ]
